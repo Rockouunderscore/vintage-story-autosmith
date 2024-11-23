@@ -1,0 +1,11 @@
+{
+  "type": "code",
+  "modid": "autosmith",
+  "name": "Auto Smith",
+  "authors": ["Rockou_"],
+  "description": "Adds a mode to the hammer to auto smith.",
+  "version": "1.0.0",
+  "dependencies": {
+    "game": "1.19.8"
+  }
+}
