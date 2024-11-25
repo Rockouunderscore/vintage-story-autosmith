@@ -60,10 +60,11 @@ public class BlockEntityAnvilPatch
         __instance.MarkDirty();
     }
 
+    public static int SMITH_SLAG_REMOVED_PER_HAMMER_HIT = 1;
     public static void AutoSmith(ref BlockEntityAnvil __instance)
     {
-        
         // remove slag
+        int slagRemoved = SMITH_SLAG_REMOVED_PER_HAMMER_HIT;
         for (int y = SMITH_GRID_MAX_Y - 1; y >= 0; y--)
         for (int x = 0; x < SMITH_GRID_MAX_X; x++)
         for (int z = 0; z < SMITH_GRID_MAX_Z; z++)
@@ -71,15 +72,18 @@ public class BlockEntityAnvilPatch
             if (__instance.Voxels[x, y, z] == (byte)EnumVoxelMaterial.Slag)
             {
                 __instance.Voxels[x, y, z] = (byte)EnumVoxelMaterial.Empty;
-                return; // only 1 action at a time
+                if (--slagRemoved <= 0)
+                    return;
             }
         }
+        if (slagRemoved != SMITH_SLAG_REMOVED_PER_HAMMER_HIT)
+            return;
 
         for (int y = SMITH_GRID_MAX_Y - 1; y >= 0; y--)
         for (int x = 0; x < SMITH_GRID_MAX_X; x++)
         for (int z = 0; z < SMITH_GRID_MAX_Z; z++)
         {
-            // find a metal voxel where we dont need one
+            // find a metal voxel where we don't need one
             if (__instance.Voxels[x, y, z] == (byte)EnumVoxelMaterial.Metal && !__instance.recipeVoxels[x, y, z])
             {
                 // listen im cringing too
