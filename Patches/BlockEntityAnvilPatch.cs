@@ -60,11 +60,10 @@ public class BlockEntityAnvilPatch
         __instance.MarkDirty();
     }
 
-    public static int SMITH_SLAG_REMOVED_PER_HAMMER_HIT = 1;
     public static void AutoSmith(ref BlockEntityAnvil __instance)
     {
+        int workPerHammerHitCount = 0;
         // remove slag
-        int slagRemoved = SMITH_SLAG_REMOVED_PER_HAMMER_HIT;
         for (int y = SMITH_GRID_MAX_Y - 1; y >= 0; y--)
         for (int x = 0; x < SMITH_GRID_MAX_X; x++)
         for (int z = 0; z < SMITH_GRID_MAX_Z; z++)
@@ -72,12 +71,10 @@ public class BlockEntityAnvilPatch
             if (__instance.Voxels[x, y, z] == (byte)EnumVoxelMaterial.Slag)
             {
                 __instance.Voxels[x, y, z] = (byte)EnumVoxelMaterial.Empty;
-                if (--slagRemoved <= 0)
-                    return;
+                workPerHammerHitCount++;
+                if (workPerHammerHitCount >= AutoSmithModSystem.Config.MaxEditsPerHammerHit) return;
             }
         }
-        if (slagRemoved != SMITH_SLAG_REMOVED_PER_HAMMER_HIT)
-            return;
 
         for (int y = SMITH_GRID_MAX_Y - 1; y >= 0; y--)
         for (int x = 0; x < SMITH_GRID_MAX_X; x++)
@@ -103,8 +100,9 @@ public class BlockEntityAnvilPatch
                     __instance.Voxels[needFillPos.X, needFillPos.Y, needFillPos.Z] = (byte)EnumVoxelMaterial.Metal;
                 }
                 // destroy where we took the voxel / or just plain destroy it
+                workPerHammerHitCount++;
                 __instance.Voxels[x, y, z] = (byte)EnumVoxelMaterial.Empty;
-                return; // only 1 action at a time
+                if (workPerHammerHitCount >= AutoSmithModSystem.Config.MaxEditsPerHammerHit) return;
             }
         }
 

@@ -4,7 +4,7 @@
   "name": "Auto Smith",
   "authors": ["Rockou_"],
   "description": "Adds a mode to the hammer to auto smith.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "dependencies": {
     "game": "1.19.8"
   }

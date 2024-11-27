@@ -1,4 +1,5 @@
 ﻿
+using AutoSmith.Configuration;
 using HarmonyLib;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -8,13 +9,17 @@ namespace AutoSmith
 {
     public class AutoSmithModSystem : ModSystem
     {
+        public static AutoSmithConfig Config { get; private set; }
+        
         private Harmony _harmony;
 
         public override void Start(ICoreAPI api)
         {
             api.Logger.Notification("Hello from Auto Smith!");
+
+            Config = ModConfig.ReadConfig(api);
             
-            _harmony = new Harmony("autosmith");
+            _harmony = new Harmony(ModConstants.ModIdentifier);
             
             _harmony.PatchCategory("BothSide");
         }
